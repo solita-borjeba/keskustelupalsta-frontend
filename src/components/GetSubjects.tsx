@@ -3,7 +3,8 @@ import { SERVER_URL } from '../constants';
 import { DataGrid, GridColDef, GridRowsProp } from '@mui/x-data-grid';
 
 function GetSubjects() {
-    const [subjects, setSubjects] = useState([]);
+    const [data, setData] = useState<any[]>([])
+    const [message, setMessage] = useState("");
 
     const testrows: GridRowsProp = [
         { id: 1, aihe: 'Hello', viestienlkm: 1, aikaleima: '12:00' },
@@ -18,9 +19,20 @@ function GetSubjects() {
     ];
 
     useEffect(() => {
-        fetch(SERVER_URL + 'getSubjects');
         console.log("getSubjects execute");
 
+        fetch(SERVER_URL + 'getSubject')
+        .then(response => {
+            if (!response.ok) {
+                console.log("Response nok");
+            }
+            return response.json();
+        })
+        .then(data => setData(data.data))
+        .catch(err => console.error(err));
+ {/*
+        .then(responseJson => console.log(responseJson));
+    */}
     }, []);
 
     return (
@@ -29,8 +41,20 @@ function GetSubjects() {
                 rows={testrows}
                 columns={columns} />
             <br />
-            GetSubjects näkymä yläpuolella.
+            GetSubjects 
             
+            {
+                data.map((subject, index) =>
+                <tr key={index}>
+                    <td>{subject.id}</td>
+                    <td>{subject.subject}</td>
+                    <td>{subject.message}</td>
+                    <td>{subject.aikaleima}</td>
+                </tr>
+                )
+            }           
+            xx
+        
         </div>
     )
 }

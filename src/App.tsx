@@ -21,12 +21,14 @@ function App() {
         </Toolbar>
       </Appbar>
           <GetSubjects />
+          {/* Ei toteutettu vielä
           <br /> <br />
           <AddSubject />
           <br />
           <UpdateSubject />
           <br />
           <DeleteSubject />
+          */}
     </div>
   );
 }
