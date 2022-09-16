@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { SERVER_URL } from '../constants';
 import { DataGrid, GridColDef, GridRowsProp } from '@mui/x-data-grid';
+import AddSubject from './AddSubject';
 
 function GetSubjects() {
-    const [data, setData] = useState<any[]>([])
+    const [subjects, setSubjects] = useState<any[]>([])
     const [message, setMessage] = useState("");
 
     const testrows: GridRowsProp = [
@@ -13,8 +14,8 @@ function GetSubjects() {
       ];
 
     const columns: GridColDef[] = [
-        {field: 'aihe', headerName: 'Aihe', width: 200},
-        {field: 'viestienlkm', headerName: 'Viestien lkm', width: 200},
+        {field: 'subject', headerName: 'Aihe', width: 200},
+        {field: 'numberOfMessage', headerName: 'Viestien lkm', width: 200},
         {field: 'aikaleima', headerName: 'Aikaleima', width: 200},
     ];
 
@@ -28,23 +29,37 @@ function GetSubjects() {
             }
             return response.json();
         })
-        .then(data => setData(data.data))
+        .then(data => setSubjects(data.subjects))
         .catch(err => console.error(err));
  {/*
         .then(responseJson => console.log(responseJson));
     */}
     }, []);
 
+
+    // Fetch subjects
+    const fetchSubjects = () => {
+        fetch(SERVER_URL + 'getSubject')
+        .then(response => {
+            if (!response.ok) {
+                console.log("Response nok");
+            }
+            return response.json();
+        })
+        .then(data => setSubjects(data.subjects))
+        .catch(err => console.error(err));       
+    }
+
     return (
         <div style={{height: 300, width: '100%'}}>
             <DataGrid
-                rows={testrows}
+                rows={subjects}
                 columns={columns} />
             <br />
             GetSubjects 
             
             {
-                data.map((subject, index) =>
+                subjects.map((subject, index) =>
                 <tr key={index}>
                     <td>{subject.id}</td>
                     <td>{subject.subject}</td>
@@ -53,7 +68,7 @@ function GetSubjects() {
                 </tr>
                 )
             }           
-            xx
+            xxx
         
         </div>
     )

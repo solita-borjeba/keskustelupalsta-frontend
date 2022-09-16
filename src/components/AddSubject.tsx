@@ -6,57 +6,84 @@ import DialogContent from '@mui/material/DialogContent';
 import { DialogActions } from '@mui/material';
 
 function AddSubject() {
+    
     const [open, setOpen] = useState(false);
-    const[aihe, setAihe] = useState({
-        aihenimi: '',
-        viesti: ''
-    });
+    const INITIAL_STATE = {
+        id: 0,
+        subjectname: 'Subject name',
+        message: 'Message',
+        timestamp: new Date()
+    };
 
-    const handleUusiAihe = () => {
+    const[subject, setSubject] = useState(INITIAL_STATE);
+
+    const handleNewSubjectOpen = () => {
         setOpen(true);
     }
-    const handleUusiAiheClose = () => {
+    const handleNewSubjectClose = () => {
         setOpen(false);
+        initialState();
     }
 
-
-    const handleAihe = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setAihe({...aihe, [event.target.name]: event.target.value});
+    const initialState = () => {
+        setSubject(INITIAL_STATE);
     }
 
-    useEffect(() => {
-        fetch( SERVER_URL + 'addSubject');
-        console.log("addSubject execute.");
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSubject({...subject, [event.target.name]: event.target.value});
+    }
+    
+    const handleSave = () => {
+        addSubject(subject);
+        handleNewSubjectClose();
+    }
 
-    }, []);
+    // Add a new subject
+    const addSubject = (subject: any) => {
+        fetch(SERVER_URL  +  'createSubject',
+        {
+            method: 'POST',
+            headers: { 'Content-Type':'application/json' },
+            body: JSON.stringify(subject)
+  
+        })
+        .then(response => {
+            if (response.ok) {
+//                fetchSubjects();
+            } else {
+                alert('Something went wrong!');
+            }
+        })  
+        .catch(err => console.error(err))
+    }
 
+    
     return (
         <div>
         <br /> <br /> <br />
-            <button onClick={handleUusiAihe}>Uusi aihe</button>
-            {
-            //<Dialog open={open} onClose={handleUusiAiheClose}>
-            //    <DialogTitle>Uusi aihe</DialogTitle>
-            //    <DialogContent>
-            }
+            <button onClick={handleNewSubjectOpen}>Uusi aihe</button>
+            <Dialog open={open} onClose={handleNewSubjectClose}>
+                <DialogTitle>Uusi aihe</DialogTitle>
+                <DialogContent>
                     <br />
-                    <input placeholder="aiheen nimi" name="uusiaihe"
-                    value={aihe.aihenimi} onChange={handleAihe} />
+                    <input type="text" 
+                        name="subjectname"
+                        onChange={handleChange} 
+                        value={subject.subjectname}  />
                     <br />
-                    <input placeholder="viesti" name="viesti"
-                    value={aihe.viesti} onChange={handleAihe} />
+                    <input type="text" 
+                        name="message"
+                        onChange={handleChange}
+                        value={subject.message}  />
                     <br />
-            {
-            //    </DialogContent>
-            //    <DialogActions>
-            }
-                    <button onClick={handleUusiAiheClose}>Peruuta</button>
-                    <button onClick={handleUusiAiheClose}>Tallenna</button>
-            {
-            //    </DialogActions>
+                </DialogContent>
+                <DialogActions>
+                    <button onClick={handleNewSubjectClose}>Peruuta</button>
+                    <button onClick={handleSave}>Tallenna</button>
+                </DialogActions>
             
-            //</Dialog>
-            }
+            </Dialog>
+            
             <br /> <br />
             AddSubject näkymä yläpuolella.
         </div>

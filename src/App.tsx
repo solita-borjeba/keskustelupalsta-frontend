@@ -20,7 +20,7 @@ function App() {
           </Typography>
         </Toolbar>
       </Appbar>
-          <GetSubjects />
+          <AddSubject />
           {/* Ei toteutettu vielä
           <br /> <br />
           <AddSubject />
