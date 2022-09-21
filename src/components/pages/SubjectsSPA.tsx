@@ -1,28 +1,49 @@
 import React, { useEffect, useState } from 'react';
-import { SERVER_URL } from '../constants';
+import { SERVER_URL } from '../../constants';
 import { DataGrid, GridColDef, GridRowsProp } from '@mui/x-data-grid';
-import AddSubject from './AddSubject';
 
-function GetSubjects() {
+function SubjectsSPA() {
     const [subjects, setSubjects] = useState<any[]>([])
     const [message, setMessage] = useState("");
 
-    const testrows: GridRowsProp = [
+    const testrows: GridRowsProp = [ //Turha
         { id: 1, aihe: 'Hello', viestienlkm: 1, aikaleima: '12:00' },
         { id: 2, aihe: 'DataGridPro', viestienlkm: 2, aikaleima: '13:00' },
         { id: 3, aihe: 'MUI', viestienlkm: 1, aikaleima: '12:30' },
       ];
 
     const columns: GridColDef[] = [
-        {field: 'subject', headerName: 'Aihe', width: 200},
+        {field: 'aihe', headerName: 'Aihe', width: 200},
         {field: 'numberOfMessage', headerName: 'Viestien lkm', width: 200},
         {field: 'aikaleima', headerName: 'Aikaleima', width: 200},
-    ];
+        {field: '_link.self.href',
+        headerName: '',
+        sortable: false,
+        renderCell: row =>
+            <button>
+                Delete
+            </button>
+        }
+];
 
+
+
+            {/* "Varasto"
+            field: '_link.self.href',
+            headerName: '',
+            sortable: false,
+            renderCell: row =>
+                <button onClick={() => onDeleteClick(row.id)}>
+                    Delete
+                </button>
+        */}
+
+    //original VOI POISTAA
+{/*
     useEffect(() => {
         console.log("getSubjects execute");
 
-        fetch(SERVER_URL + 'getSubject')
+        fetch(SERVER_URL + 'getSubject', {method: 'GET'})
         .then(response => {
             if (!response.ok) {
                 console.log("Response nok");
@@ -31,13 +52,14 @@ function GetSubjects() {
         })
         .then(data => setSubjects(data.subjects))
         .catch(err => console.error(err));
- {/*
-        .then(responseJson => console.log(responseJson));
-    */}
     }, []);
+*/}
 
 
-    // Fetch subjects
+    // Fetch subjects, delete
+    useEffect(() => {
+        fetchSubjects();
+    }, []);
     const fetchSubjects = () => {
         fetch(SERVER_URL + 'getSubject')
         .then(response => {
@@ -49,6 +71,14 @@ function GetSubjects() {
         .then(data => setSubjects(data.subjects))
         .catch(err => console.error(err));       
     }
+{/*
+    // Delete some subject
+    const onDeleteClick = (url: any) => {
+        fetch(url, {method: 'DELETE'})
+        .then(response => fetchSubjects())
+        .catch(err => console.error(err))
+    }
+*/}
 
     return (
         <div style={{height: 300, width: '100%'}}>
@@ -74,4 +104,4 @@ function GetSubjects() {
     )
 }
 
-export default GetSubjects;
+export default SubjectsSPA;

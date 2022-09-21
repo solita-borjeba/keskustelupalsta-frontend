@@ -5,30 +5,19 @@ import Appbar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 
-import GetSubjects from './components/GetSubjects';
-import AddSubject from './components/AddSubject';
-import UpdateSubject from './components/UpdateSubject';
-import DeleteSubject from './components/DeleteSubject';
+import Header from './components/Header'
+import SubjectsSPA from './components/pages/SubjectsSPA';
+import SubjectButton from './components/buttons/SubjectButton';
 
 function App() {
+  const columns = ['Subject', 'NUmber of messages', 'Timestamp']
+  const types = ['New subject', 'Update subject']; 
+
   return (
     <div className="App">
-      <Appbar position="static">
-        <Toolbar>
-          <Typography variant="h6">
-            Keskustelupalsta
-          </Typography>
-        </Toolbar>
-      </Appbar>
-          <AddSubject />
-          {/* Ei toteutettu vielä
-          <br /> <br />
-          <AddSubject />
-          <br />
-          <UpdateSubject />
-          <br />
-          <DeleteSubject />
-          */}
+        <Header />
+        <SubjectsSPA />
+        <SubjectButton subject={types} />
     </div>
   );
 }
