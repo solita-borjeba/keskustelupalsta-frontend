@@ -146,8 +146,6 @@ function SubjectButton(props: any) {
             
             </Dialog>
             
-            <br /> <br />
-            AddSubject näkymä yläpuolella.
         </div>
     )
 

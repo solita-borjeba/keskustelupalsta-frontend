@@ -95,7 +95,6 @@ function SubjectsSPA() {
                 rows={subjects}
                 columns={columns} />
             <br />
-            <UpdateButton subject={'Kesken'}/>
         </div>
     )
 }
