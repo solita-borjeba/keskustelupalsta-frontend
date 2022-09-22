@@ -19,6 +19,7 @@ function App() {
         <SubjectsSPA />
         <SubjectButton subject={types} />
     </div>
+    
   );
 }
 

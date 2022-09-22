@@ -1,6 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { SERVER_URL } from '../../constants';
 import { DataGrid, GridColDef, GridRowsProp } from '@mui/x-data-grid';
+import axios from 'axios';
+import { url } from 'inspector';
+import UpdateButton from '../buttons/UpdateButton';
+import { Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 
 function SubjectsSPA() {
     const [subjects, setSubjects] = useState<any[]>([])
@@ -13,55 +17,37 @@ function SubjectsSPA() {
       ];
 
     const columns: GridColDef[] = [
-        {field: 'aihe', headerName: 'Aihe', width: 200},
+        {field: 'subjectname', headerName: 'Aihe', width: 200},
         {field: 'numberOfMessage', headerName: 'Viestien lkm', width: 200},
         {field: 'aikaleima', headerName: 'Aikaleima', width: 200},
-        {field: '_link.self.href',
+        {field: 'update',
         headerName: '',
-        sortable: false,
         renderCell: row =>
-            <button>
+            <button onClick={() => onUpdateClick(row.id)}>
+                Update
+            </button>
+        },
+        {field: 'delete',
+        headerName: '',
+        renderCell: row =>
+            <button onClick={() => onDeleteClick(row.id)}>
                 Delete
             </button>
         }
-];
-
-
-
-            {/* "Varasto"
-            field: '_link.self.href',
-            headerName: '',
-            sortable: false,
-            renderCell: row =>
-                <button onClick={() => onDeleteClick(row.id)}>
-                    Delete
-                </button>
-        */}
-
-    //original VOI POISTAA
-{/*
-    useEffect(() => {
-        console.log("getSubjects execute");
-
-        fetch(SERVER_URL + 'getSubject', {method: 'GET'})
-        .then(response => {
-            if (!response.ok) {
-                console.log("Response nok");
-            }
-            return response.json();
-        })
-        .then(data => setSubjects(data.subjects))
-        .catch(err => console.error(err));
-    }, []);
-*/}
-
-
+    ];
+/* Uutta, KESKEN
+    const onInsertOne = useCallback( () => {
+        const newTestRecord = createOneSubjectRecord();
+        data.subjects = [newTestRecord, ...subjects] 
+        setSubjects(data.subjects);
+    });
+*/
     // Fetch subjects, delete
     useEffect(() => {
         fetchSubjects();
     }, []);
     const fetchSubjects = () => {
-        fetch(SERVER_URL + 'getSubject')
+        fetch(SERVER_URL + 'getSubjects')
         .then(response => {
             if (!response.ok) {
                 console.log("Response nok");
@@ -71,35 +57,45 @@ function SubjectsSPA() {
         .then(data => setSubjects(data.subjects))
         .catch(err => console.error(err));       
     }
-{/*
+
     // Delete some subject
-    const onDeleteClick = (url: any) => {
-        fetch(url, {method: 'DELETE'})
+    const onDeleteClick = (id: any) => {
+
+
+        fetch(`${SERVER_URL}deleteSubject/${id}/`, 
+        {
+            method: 'DELETE',
+            headers: { 'Content-Type':'application/json' }
+        })
         .then(response => fetchSubjects())
         .catch(err => console.error(err))
     }
-*/}
+
+    // Update some subject
+    const onUpdateClick = (id: any) => {
+    
+            fetch(`${SERVER_URL}updateSubject/${id}/`, 
+            {
+                method: 'PUT',
+                headers: { 'Content-Type':'application/json' },
+                body: JSON.stringify({"subjectname": "Updated"})
+            })
+            .then(response => fetchSubjects())
+            .catch(err => console.error(err))
+    }
+
+    
 
     return (
         <div style={{height: 300, width: '100%'}}>
+        <div>
+            <button>Insert One</button>
+        </div>
             <DataGrid
                 rows={subjects}
                 columns={columns} />
             <br />
-            GetSubjects 
-            
-            {
-                subjects.map((subject, index) =>
-                <tr key={index}>
-                    <td>{subject.id}</td>
-                    <td>{subject.subject}</td>
-                    <td>{subject.message}</td>
-                    <td>{subject.aikaleima}</td>
-                </tr>
-                )
-            }           
-            xxx
-        
+            <UpdateButton subject={'Kesken'}/>
         </div>
     )
 }

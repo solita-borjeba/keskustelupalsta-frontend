@@ -5,7 +5,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import { Box, Button, DialogActions, Stack } from '@mui/material';
 
-function SubjectButton(props: any) {
+function UpdateButton(props: any) {
     
     const [newsubject, setNewsubject] = useState(false);
     const [updatesubject, setUpdatesubject] = useState(false);
@@ -153,4 +153,4 @@ function SubjectButton(props: any) {
 
 }
 
-export default SubjectButton;
+export default UpdateButton;
