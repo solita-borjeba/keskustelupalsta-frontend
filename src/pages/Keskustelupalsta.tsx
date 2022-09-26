@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { SERVER_URL } from '../../config/constants';
+import { SERVER_URL } from '../config/constants';
 import { DataGrid, GridColDef, GridRowsProp, useGridApiRef } from '@mui/x-data-grid';
-import SubjectDataService from '../../services/SubjectDataService';
+import SubjectDataService from '../services/SubjectDataService';
 
 function Keskustelupalsta() {
     const [subjects, setSubjects] = useState<any[]>([])

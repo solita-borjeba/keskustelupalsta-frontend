@@ -6,7 +6,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 
 import Header from './components/Header'
-import Keskustelupalsta from './components/pages/Keskustelupalsta';
+import Keskustelupalsta from './pages/Keskustelupalsta';
 import AddButton from './components/buttons/AddButton';
 import UpdateButton from './components/buttons/UpdateButton';
 
