@@ -6,8 +6,9 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 
 import Header from './components/Header'
-import SubjectsSPA from './components/pages/SubjectsSPA';
-import SubjectButton from './components/buttons/SubjectButton';
+import Keskustelupalsta from './components/pages/Keskustelupalsta';
+import AddButton from './components/buttons/AddButton';
+import UpdateButton from './components/buttons/UpdateButton';
 
 function App() {
   const columns = ['Subject', 'NUmber of messages', 'Timestamp']
@@ -16,8 +17,9 @@ function App() {
   return (
     <div className="App">
         <Header />
-        <SubjectsSPA />
-        <SubjectButton subject={types} />
+        <Keskustelupalsta />
+        <AddButton subject={types} />
+        <UpdateButton subject={types} />
     </div>
     
   );

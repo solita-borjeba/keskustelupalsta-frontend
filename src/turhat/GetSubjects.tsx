@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { SERVER_URL } from '../constants';
+import { SERVER_URL } from '../config/constants';
 import { DataGrid, GridColDef, GridRowsProp } from '@mui/x-data-grid';
 
 function GetSubjects() {

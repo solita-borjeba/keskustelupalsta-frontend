@@ -1,15 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { SERVER_URL } from '../../constants';
-import { DataGrid, GridColDef, GridRowsProp } from '@mui/x-data-grid';
-import axios from 'axios';
-import { url } from 'inspector';
-import UpdateButton from '../buttons/UpdateButton';
-import { Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
+import { SERVER_URL } from '../../config/constants';
+import { DataGrid, GridColDef, GridRowsProp, useGridApiRef } from '@mui/x-data-grid';
+import SubjectDataService from '../../services/SubjectDataService';
 
-function SubjectsSPA() {
+function Keskustelupalsta() {
     const [subjects, setSubjects] = useState<any[]>([])
-    const [message, setMessage] = useState("");
-
+    
     const testrows: GridRowsProp = [ //Turha
         { id: 1, aihe: 'Hello', viestienlkm: 1, aikaleima: '12:00' },
         { id: 2, aihe: 'DataGridPro', viestienlkm: 2, aikaleima: '13:00' },
@@ -17,16 +13,10 @@ function SubjectsSPA() {
       ];
 
     const columns: GridColDef[] = [
+        {field: 'id', headerName: 'id', width: 200},
         {field: 'subjectname', headerName: 'Aihe', width: 200},
         {field: 'numberOfMessage', headerName: 'Viestien lkm', width: 200},
         {field: 'aikaleima', headerName: 'Aikaleima', width: 200},
-        {field: 'update',
-        headerName: '',
-        renderCell: row =>
-            <button onClick={() => onUpdateClick(row.id)}>
-                Update
-            </button>
-        },
         {field: 'delete',
         headerName: '',
         renderCell: row =>
@@ -35,45 +25,32 @@ function SubjectsSPA() {
             </button>
         }
     ];
-/* Uutta, KESKEN
-    const onInsertOne = useCallback( () => {
-        const newTestRecord = createOneSubjectRecord();
-        data.subjects = [newTestRecord, ...subjects] 
-        setSubjects(data.subjects);
-    });
-*/
-    // Fetch subjects, delete
+
+    const getRowId = ((row: any) => console.log(row));
+    //    (row) => row.id;
+    
+    // Fetch subjects
     useEffect(() => {
         fetchSubjects();
     }, []);
+
     const fetchSubjects = () => {
-        fetch(SERVER_URL + 'getSubjects')
-        .then(response => {
-            if (!response.ok) {
-                console.log("Response nok");
-            }
-            return response.json();
-        })
-        .then(data => setSubjects(data.subjects))
-        .catch(err => console.error(err));       
+        SubjectDataService.getAll()
+        .then(data => setSubjects(data.data.subjects));
     }
 
     // Delete some subject
     const onDeleteClick = (id: any) => {
-
-
-        fetch(`${SERVER_URL}deleteSubject/${id}/`, 
-        {
-            method: 'DELETE',
-            headers: { 'Content-Type':'application/json' }
-        })
-        .then(response => fetchSubjects())
-        .catch(err => console.error(err))
+        SubjectDataService.delete(id)
+        .then(response => fetchSubjects());
     }
 
     // Update some subject
     const onUpdateClick = (id: any) => {
-    
+//        SubjectDataService.update()
+//        const rowIds = apiRef.current.getAllRowIds();
+//        console.log('BB id: ' + rowIds.id);
+/*        
             fetch(`${SERVER_URL}updateSubject/${id}/`, 
             {
                 method: 'PUT',
@@ -82,21 +59,20 @@ function SubjectsSPA() {
             })
             .then(response => fetchSubjects())
             .catch(err => console.error(err))
+*/
     }
 
-    
+
 
     return (
         <div style={{height: 300, width: '100%'}}>
-        <div>
-            <button>Insert One</button>
-        </div>
             <DataGrid
                 rows={subjects}
-                columns={columns} />
+                columns={columns} 
+                />
             <br />
         </div>
     )
 }
 
-export default SubjectsSPA;
+export default Keskustelupalsta;

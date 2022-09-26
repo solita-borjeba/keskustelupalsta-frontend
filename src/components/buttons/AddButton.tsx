@@ -6,9 +6,10 @@ import DialogContent from '@mui/material/DialogContent';
 import { Button, DialogActions } from '@mui/material';
 import SubjectDataService from '../../services/SubjectDataService';
 
-function UpdateButton(props: any) {
+function AddButton(props: any) {
     
-    const [updatesubject, setUpdatesubject] = useState(false);
+    const [newsubject, setNewsubject] = useState(false);
+
     const INITIAL_STATE = {
         id: 0,
         subjectname: 'Subject name',
@@ -18,11 +19,12 @@ function UpdateButton(props: any) {
 
     const[subject, setSubject] = useState(INITIAL_STATE);
 
-    const handleUpdateSubjectOpen = () => {
-        setUpdatesubject(true);
+    const handleNewSubjectOpen = () => {
+        setNewsubject(true);
     }
+
     const handleSubjectClose = () => {
-        setUpdatesubject(false);
+        setNewsubject(false);
         initialState();
     }
 
@@ -34,14 +36,17 @@ function UpdateButton(props: any) {
         setSubject({...subject, [event.target.name]: event.target.value});
     }
     
-    const handleUpdateSubjectSave = () => {
-        updateSubject(subject);
+    const handleNewSubjectSave = () => {
+        addSubject(subject);
         handleSubjectClose();
     }
     
-    // Update a subject
-    const updateSubject = (subject: any) => {
-        SubjectDataService.update( subject.id, subject);
+    // Add a new subject
+    const addSubject = (subject: any) => {
+        console.log('BB uusi subject' + JSON.stringify(subject))
+
+        SubjectDataService.create(subject);
+
     }
 
 
@@ -57,15 +62,10 @@ function UpdateButton(props: any) {
     return (
         <div>
         <br /> <br /> <br />
-            <Button variant="outlined" color="primary" sx={{ height: 40}} onClick={handleUpdateSubjectOpen} >{props.subject[1]}</Button>
-            <Dialog open={updatesubject} onClose={handleSubjectClose}>
-                <DialogTitle>{props.subject[1]}</DialogTitle>
+            <Button variant="outlined" color="primary" sx={{ height: 40}} onClick={handleNewSubjectOpen} >{props.subject[0]}</Button>
+            <Dialog open={newsubject} onClose={handleSubjectClose}>
+                <DialogTitle>{props.subject[0]}</DialogTitle>
                 <DialogContent>
-                    <br />
-                    <input type="number"
-                        name="id"
-                        onChange={handleChange}
-                        value={subject.id} />
                     <br />
                     <input type="text" 
                         name="subjectname"
@@ -80,13 +80,13 @@ function UpdateButton(props: any) {
                 </DialogContent>
                 <DialogActions>
                     <button onClick={handleSubjectClose}>Peruuta</button>
-                    <button onClick={handleUpdateSubjectSave}>Tallenna</button>
+                    <button onClick={handleNewSubjectSave}>Tallenna</button>
                 </DialogActions>
             
-            </Dialog>
+            </Dialog>            
         </div>
     )
 
 }
 
-export default UpdateButton;
+export default AddButton;

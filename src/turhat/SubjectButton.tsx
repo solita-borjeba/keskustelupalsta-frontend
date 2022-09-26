@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { SERVER_URL } from '../../constants';
+import { SERVER_URL } from '../config/constants';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import { Box, Button, DialogActions, Stack } from '@mui/material';
+import SubjectDataService from '../services/SubjectDataService';
 
 function SubjectButton(props: any) {
     
     const [newsubject, setNewsubject] = useState(false);
     const [updatesubject, setUpdatesubject] = useState(false);
+
     const INITIAL_STATE = {
         id: 0,
         subjectname: 'Subject name',
@@ -50,40 +52,16 @@ function SubjectButton(props: any) {
     // Add a new subject
     const addSubject = (subject: any) => {
         console.log('BB uusi subject' + JSON.stringify(subject))
-        fetch(SERVER_URL  +  'createSubject/',
-        {
-            method: 'POST',
-            headers: { 'Content-Type':'application/json' },
-            body: JSON.stringify(subject)
-  
-        })
-        .then(response => {
-            if (response.ok) {
-//                fetchSubjects();
-            } else {
-                alert('Something went wrong!');
-            }
-        })  
-        .catch(err => console.error(err))
+
+        SubjectDataService.create(subject);
+
     }
 
     // Update a subject
     const updateSubject = (subject: any) => {
-        fetch(SERVER_URL  +  'updateSubject',
-        {
-            method: 'PUT',
-            headers: { 'Content-Type':'application/json' },
-            body: JSON.stringify(subject)
-  
-        })
-        .then(response => {
-            if (response.ok) {
-//                fetchSubjects();
-            } else {
-                alert('Something went wrong!');
-            }
-        })  
-        .catch(err => console.error(err))
+
+        SubjectDataService.update( subject.id, subject);
+
     }
 
 
@@ -127,6 +105,11 @@ function SubjectButton(props: any) {
             <Dialog open={updatesubject} onClose={handleSubjectClose}>
                 <DialogTitle>{props.subject[1]}</DialogTitle>
                 <DialogContent>
+                    <br />
+                    <input type="number"
+                        name="id"
+                        onChange={handleChange}
+                        value={subject.id} />
                     <br />
                     <input type="text" 
                         name="subjectname"

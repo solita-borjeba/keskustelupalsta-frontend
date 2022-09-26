@@ -1,20 +1,22 @@
-import http from "../http-common";
+import http from "./http-common";
+
 
 class SubjectDataService {
     getAll() {
-        return http.get("/getSubjects");
+        // Fetch subjects
+        return http.get("getSubjects");
     }
 
     create(data: any) {
-        return http.post("createSubject");
+        return http.post("createSubject", data);
     }
 
     update(id: any, data: any) {
-        return http.put("updateSubject");
+        return http.put("updateSubject/" + id, data);
     }
 
     delete(id: any) {
-        return http.delete("deleteSubject");
+        return http.delete("deleteSubject/" + id);
     }
 
 }
