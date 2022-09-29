@@ -49,7 +49,7 @@ function AddButton(props: any) {
 
     }
 
-
+/*
     const boxDefault = {
         height: 100,
         border: "1px solid transparent",
@@ -57,7 +57,7 @@ function AddButton(props: any) {
         minWidth: 600,
         m: 1
     }
-
+*/
     
     return (
         <div>
